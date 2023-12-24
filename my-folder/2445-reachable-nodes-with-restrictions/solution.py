@@ -1,24 +1,19 @@
-from collections import defaultdict
 class Solution:
     def reachableNodes(self, n: int, edges: List[List[int]], restricted: List[int]) -> int:
-        graph =defaultdict(list)
-        seen = set()
+        graph=defaultdict(list)
+        for a,b in edges:
+            graph[a].append(b)
+            graph[b].append(a)
         
-        for x,y in edges:
-            graph[x].append(y)
-            graph[y].append(x)
-            
         def dfs(node):
-            for neighbor in graph[node]:
-                if neighbor not in seen:
-                    seen.add(neighbor)
-                    self.visits +=1
-                    dfs(neighbor)
-        
-        seen.add(0)
-        self.visits = 1
-        for node in restricted:
+            if node in seen:
+                return 0
             seen.add(node)
-        dfs(0)
-        return self.visits
+            return 1 + sum([dfs(neighbor) for neighbor in graph[node]])
+                
+        seen=set(restricted)
+        return dfs(0)
         
+                
+        
+                    
