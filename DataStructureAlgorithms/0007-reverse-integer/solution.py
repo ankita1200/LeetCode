@@ -1,14 +1,15 @@
 class Solution:
     def reverse(self, x: int) -> int:
-        MAX_INT = 2**31 - 1
-        MIN_INT = -2**31
-        reverse=0
-        while x != 0:
-            if reverse > MAX_INT /10 or reverse < MIN_INT /10:
-                return 0
-            digit = x % 10 if x > 0 else x % -10
-            reverse = reverse* 10 + digit 
-            x = math.trunc(x/10)
-        
-        return reverse
+        a=2**31
+        rev=0
+        flag=False
+        if x<0:
+            flag=True
+            x=x*(-1)
+        while x>0:
+            rev=rev*10 + x%10
+            x=x//10
+        if rev<a*-1 or rev>a-1:
+            return 0
+        return -1*rev if flag else rev
         
