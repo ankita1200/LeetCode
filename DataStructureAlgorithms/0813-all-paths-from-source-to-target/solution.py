@@ -1,21 +1,21 @@
 class Solution:
     def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
-        n = len(graph)
-        if n <= 1:
-            return graph
         
-        end = n-1
-        paths = []
-        def bfs(node, path):
-            if node == end:
-                paths.append(list(path))
+        n = len(graph)
+        self.ans = []
+        def dfs(path):
+            if path[-1] == n-1:
+                self.ans.append(path)
                 return
+            node = path[-1]
+            
             for neighbor in graph[node]:
-                path.append(neighbor)
-                bfs(neighbor, path)
-                path.pop()
+                if neighbor not in path:
+                    newpath = path + [neighbor]
+                    dfs(newpath)
+        
+        dfs([0])
+        return self.ans
+                    
             
-            
-        bfs(0, [0])
-        return paths
         
