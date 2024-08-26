@@ -1,17 +1,11 @@
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
-        pascal = []
-        pascal.append([1])
-        if numRows == 1:
-            return pascal
-        pascal.append([1,1])
+        dp = [[] for _ in range(numRows)]
+        dp[0].append(1)
+        for i in range(1,numRows):
+            dp[i].append(1)
+            for j in range(1,len(dp[i-1])):
+                dp[i].append(dp[i-1][j-1]+dp[i-1][j])
+            dp[i].append(1)
+        return dp   
         
-        for i in range(3, numRows+1):
-            prevrow = pascal[-1]
-            f = []
-            f.append(prevrow[0])
-            for j in range(len(prevrow)-1):
-                f.append(prevrow[j]+prevrow[j+1])
-            f.append(prevrow[-1])
-            pascal.append(f)
-        return pascal
