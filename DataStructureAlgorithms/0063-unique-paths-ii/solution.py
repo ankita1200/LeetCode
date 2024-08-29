@@ -1,18 +1,52 @@
 class Solution:
     def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
-        m = len(obstacleGrid)
-        n = len(obstacleGrid[0])
-
+        
+        m,n = len(obstacleGrid), len(obstacleGrid[0])
+        
         @cache
-        def findNumOfPaths(x,y):
-            if x > m-1 or y > n-1:
-                return 0
-            if obstacleGrid[x][y] == 1:
-                return 0
-            if x==m-1 and y==n-1:
-                return 1
-            return findNumOfPaths(x+1,y) + findNumOfPaths(x,y+1)
-
-        return findNumOfPaths(0,0)
+        def dp(row,col):
+            if row==m-1 and col==n-1:
+                return 1 if obstacleGrid[0][0]==0 else 0
+            count=0
+            if row+1<m and obstacleGrid[row+1][col]==0:
+                count = dp(row+1,col)
+            if col+1<n and obstacleGrid[row][col+1]==0:
+                count += dp(row,col+1)
+            return count
+        
+        return dp(0,0)
             
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
