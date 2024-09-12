@@ -1,37 +1,62 @@
+class UnionFind:
+    def __init__(self,grid):
+        nr,nc = len(grid),len(grid[0])
+        self.parent = []
+        self.rank = [] 
+        self.count = 0
+        for i in range(nr):
+            for j in range(nc):
+                if grid[i][j] == "1":
+                    self.parent.append(i*nc+j)
+                    self.count += 1
+                else:
+                    self.parent.append(-1)
+                self.rank.append(0)
+    
+    def find(self,x):
+        if self.parent[x]!=x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    
+    def union(self,x,y):
+        rootx = self.find(x)
+        rooty = self.find(y)
+        if rootx != rooty:
+            if self.rank[rootx] > self.rank[rooty]:
+                self.parent[rooty] = rootx
+            elif self.rank[rootx] < self.rank[rooty]:
+                self.parent[rootx] = rooty
+            else:
+                self.parent[rooty] = rootx
+                self.rank[rootx] += 1
+            self.count -= 1
+    
+    def getcount(self):
+        return self.count
+            
+    
+    
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
-        #check validity
-        def validity(x,y):
-            return 0<=x<m and 0<=y<n and grid[x][y]=="1"
-
-        #use depth first search to explore a component
-        def dfs(x,y):
-            for dx,dy in steps:
-                newX=x+dx
-                newY=y+dy
-                if validity(newX,newY) and (newX,newY) not in seen:
-                    seen.add((newX,newY))
-                    dfs(newX,newY)
-
+        if not grid:
+            return 0
         
-        #counts the number of islands/components
-        ans=0
-        seen=set()
-        #directions- equivalent to locating neighbors
-        steps=[(0,1),(1,0),(-1,0),(0,-1)]
-        m=len(grid)
-        n=len(grid[0])
+        nrows,ncols = len(grid),len(grid[0])
+        uf = UnionFind(grid)
         
-        #Iterate through the matrix to find all the islands
-        for i in range(m):
-            for j in range(n):
-                if grid[i][j]=="0":
-                    seen.add((i,j))
-                elif (grid[i][j]=="1") and ((i,j) not in seen):
-                    seen.add((i,j))
-                    ans+=1
-                    dfs(i,j)
-        
-        return ans
-                
+        for i in range(nrows):
+            for j in range(ncols):
+                if grid[i][j] == "1":
+                    grid[i][j]="0"
+                    if i-1 >=0 and grid[i-1][j]=="1":
+                        uf.union(i*ncols+j, (i-1)*ncols+j)
+                    if i+1< nrows and grid[i+1][j]=="1":
+                        uf.union(i*ncols+j, (i+1)*ncols+j)
+                    if j-1 >=0 and grid[i][j-1]=="1":
+                        uf.union(i*ncols+j,i*ncols+j-1)
+                    if j+1 < ncols and grid[i][j+1]=="1":
+                        uf.union(i*ncols+j, i*ncols+j+1)
+                        
+        return uf.getcount()
+                        
         
