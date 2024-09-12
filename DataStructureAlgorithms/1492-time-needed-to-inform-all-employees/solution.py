@@ -13,7 +13,6 @@ class Solution:
             for neighbor in graph[node]:
                 dfs(neighbor,val+informTime[node])
             return
-            
         
         self.maxval=0
         dfs(headID,0)
